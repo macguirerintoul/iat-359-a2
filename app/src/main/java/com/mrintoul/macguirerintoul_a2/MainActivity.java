@@ -15,25 +15,22 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.Adapter sensorAdapter;
     private RecyclerView.LayoutManager sensorLayoutManager;
     private SensorManager mySensorManager;
+    public List<Sensor> sensorList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mySensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        List<Sensor> sensorList = mySensorManager.getSensorList(Sensor.TYPE_ALL);
+        sensorList = mySensorManager.getSensorList(Sensor.TYPE_ALL);
 
         sensorRecyclerView = findViewById(R.id.sensorRecyclerView);
 
-        // use a linear layout manager
         sensorLayoutManager = new LinearLayoutManager(this);
         sensorRecyclerView.setLayoutManager(sensorLayoutManager);
 
-        // specify an adapter (see also next example)
         sensorAdapter = new MyAdapter(sensorList);
         sensorRecyclerView.setAdapter(sensorAdapter);
-
-
 
     }
 }
