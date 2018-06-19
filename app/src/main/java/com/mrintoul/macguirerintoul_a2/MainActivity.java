@@ -14,8 +14,8 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView sensorRecyclerView;
     private RecyclerView.Adapter sensorAdapter;
     private RecyclerView.LayoutManager sensorLayoutManager;
-    private SensorManager mySensorManager;
-    public List<Sensor> sensorList;
+    public static SensorManager mySensorManager;
+    public static List<Sensor> sensorList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

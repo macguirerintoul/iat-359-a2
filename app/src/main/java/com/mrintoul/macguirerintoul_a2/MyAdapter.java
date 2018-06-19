@@ -1,6 +1,7 @@
 package com.mrintoul.macguirerintoul_a2;
 
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         // each data item is just a string in this case
         public LinearLayout sensorLayout;
         public TextView sensorTextView;
+        public int sensorType;
         Context context;
 
         public ViewHolder(View v) {
@@ -33,8 +35,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
         @Override
         public void onClick(View v) {
-            Toast.makeText(context,"You have clicked " + sensorTextView.getText().toString(),
-                    Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(v.getContext(), DataActivity.class);
+            i.putExtra("SENSOR_TYPE", sensorType);
+            v.getContext().startActivity(i);
         }
     }
 
@@ -55,6 +58,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.sensorTextView.setText(sensorDataset.get(position).getName());
+        holder.sensorType = sensorDataset.get(position).getType();
     }
 
     // Return the size of your dataset (invoked by the layout manager)
