@@ -13,7 +13,7 @@ import android.widget.TextView;
 import java.util.List;
 
 public class DataActivity extends AppCompatActivity implements SensorEventListener {
-    TextView sensorName, valuesTextView;
+    TextView sensorName, valuesTextView, infoTextView;
     SensorManager sensorManager;
     Sensor thisSensor;
     @Override
@@ -23,6 +23,7 @@ public class DataActivity extends AppCompatActivity implements SensorEventListen
         sensorManager = MainActivity.sensorManager;
         sensorName = findViewById(R.id.sensorName);
         valuesTextView = findViewById(R.id.valuesTextView);
+        infoTextView = findViewById(R.id.infoTextView);
 
         Intent i = getIntent();
         thisSensor = sensorManager.getDefaultSensor(i.getIntExtra("SENSOR_TYPE", Sensor.TYPE_ALL));
@@ -44,14 +45,21 @@ public class DataActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onSensorChanged(SensorEvent event) {
         float[] values = event.values;
-        String valueText = values[0] + "\n";
+        String valueText = "Value 1: " + values[0] + "\n";
         if (values.length > 1) {
-            valueText += values[1] + "\n";
+            valueText += "Value 2: " + values[1] + "\n";
         }
         if (values.length > 2) {
-            valueText += values[2] + "\n";
+            valueText += "Value 3: " + values[2] + "\n";
         }
         valuesTextView.setText(valueText);
+
+        String infoText = "Sensor type: " + thisSensor.getType() + "\n";
+        infoText += "Vendor: " + thisSensor.getVendor() + "\n";
+        infoText += "Version: " + thisSensor.getVersion() + "\n";
+        infoText += "Maximum value: " + thisSensor.getMaximumRange() + "\n";
+        infoText += "Resolution: " + thisSensor.getResolution()+ "\n";
+        infoTextView.setText(infoText);
     }
 
     @Override
