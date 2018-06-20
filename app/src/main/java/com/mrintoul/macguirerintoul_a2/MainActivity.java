@@ -1,6 +1,7 @@
 package com.mrintoul.macguirerintoul_a2;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public static List<Sensor> sensorList;
     private Vibrator vibrator;
     private Button motionActivityButton, soundButton;
-    boolean hasVibrated;
+    boolean hasVibrated, micPresent;
     private SoundMeter soundMeter;
     private double amplitude;
 
@@ -56,7 +57,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         soundButton = findViewById(R.id.soundButton);
         soundButton.setOnClickListener(this);
-
+        PackageManager pm = getPackageManager();
+        micPresent = pm.hasSystemFeature(PackageManager.FEATURE_MICROPHONE);
         soundMeter = new SoundMeter();
     }
 
@@ -122,6 +124,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             Intent i = new Intent(v.getContext(), MotionActivity.class);
             startActivity(i);
         } else if (v.getId() == R.id.soundButton) {
+            if (!micPresent) {
+                Toast.makeText(this, "No microphone on this device.", Toast.LENGTH_SHORT).show();
+                return;
+            }
             soundMeter.start();
             Timer t = new Timer();
             t.scheduleAtFixedRate(
