@@ -7,15 +7,13 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.TextView;
-
-import java.util.List;
 
 public class DataActivity extends AppCompatActivity implements SensorEventListener {
     TextView sensorName, valuesTextView, infoTextView;
     SensorManager sensorManager;
     Sensor thisSensor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,8 +30,8 @@ public class DataActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     protected void onResume() {
-        super.onResume();
         sensorManager.registerListener(this, thisSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        super.onResume();
     }
 
     @Override

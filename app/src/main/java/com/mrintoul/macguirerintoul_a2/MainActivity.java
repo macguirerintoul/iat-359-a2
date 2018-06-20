@@ -56,6 +56,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     @Override
+    protected void onPause() {
+        sensorManager.unregisterListener(this);
+        super.onPause();
+    }
+
+    @Override
     public void onSensorChanged(SensorEvent event) {
         int type = event.sensor.getType();
         float[] values = event.values;
