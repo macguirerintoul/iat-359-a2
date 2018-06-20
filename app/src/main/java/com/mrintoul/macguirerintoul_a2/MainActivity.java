@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public static SensorManager sensorManager;
     public static List<Sensor> sensorList;
     private Vibrator vibrator;
+    boolean hasVibrated;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,18 +62,22 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             float x = values[0];
             float y = values[1];
             float z = values[2];
-            float norm_Of_g =(float) Math.sqrt(x * x + y * y + z * z);
+            float norm_Of_g = (float) Math.sqrt(x * x + y * y + z * z);
             z = (z / norm_Of_g);
             int tilt = (int) Math.round(Math.toDegrees(Math.acos(z)));
             if (tilt < 15 || tilt > 165) {
-                if(vibrator.hasVibrator()) {
-                    vibrator.vibrate(5000); //vibrate for 5 seconds
-                    Toast.makeText(this,"device flat - beep",Toast.LENGTH_SHORT).show();
+                if (!hasVibrated) {
+                    if (vibrator.hasVibrator()) {
+                        vibrator.vibrate(5000); //vibrate for 5 seconds
+                        Toast.makeText(this, "device flat - beep", Toast.LENGTH_SHORT).show();
+                    } else {
+                        // device does not have a vibrator
+                        Toast.makeText(this, "device flat - beep (no vibrator)", Toast.LENGTH_SHORT).show();
+                    }
+                    hasVibrated = true;
                 }
-                else {
-                    // device does not have a vibrator
-                    Toast.makeText(this, "device flat - beep (no vibrator)", Toast.LENGTH_SHORT).show();
-                }
+            } else {
+                hasVibrated = false;
             }
         }
     }
