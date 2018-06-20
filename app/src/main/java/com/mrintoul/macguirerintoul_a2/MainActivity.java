@@ -5,7 +5,10 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.AudioFormat;
 import android.media.AudioManager;
+import android.media.AudioRecord;
+import android.media.MediaRecorder;
 import android.media.ToneGenerator;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +19,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener, View.OnClickListener {
     private RecyclerView sensorRecyclerView;
@@ -24,8 +29,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public static SensorManager sensorManager;
     public static List<Sensor> sensorList;
     private Vibrator vibrator;
-    private Button motionActivityButton;
+    private Button motionActivityButton, soundButton;
     boolean hasVibrated;
+    private SoundMeter soundMeter;
+    private double amplitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +53,22 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         motionActivityButton = findViewById(R.id.motionActivityButton);
         motionActivityButton.setOnClickListener(this);
+
+        soundButton = findViewById(R.id.soundButton);
+        soundButton.setOnClickListener(this);
+
+        soundMeter = new SoundMeter();
+    }
+
+    public void checkAudio() {
+        amplitude = soundMeter.getAmplitude();
+        soundButton.setText(Double.toString(amplitude));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT), SensorManager.SENSOR_DELAY_NORMAL);
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
     }
@@ -58,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onPause() {
         sensorManager.unregisterListener(this);
+        soundMeter.stop();
         super.onPause();
     }
 
@@ -102,6 +121,23 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         if (v.getId() == R.id.motionActivityButton) {
             Intent i = new Intent(v.getContext(), MotionActivity.class);
             startActivity(i);
+        } else if (v.getId() == R.id.soundButton) {
+            soundMeter.start();
+            Timer t = new Timer();
+            t.scheduleAtFixedRate(
+                    new TimerTask() {
+                        public void run() {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    checkAudio();
+                                }
+                            });
+                        }
+                    },
+                    0,      // run first occurrence immediately
+                    1000 // run every second
+            );
         }
     }
 }
