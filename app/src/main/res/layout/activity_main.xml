@@ -14,4 +14,12 @@
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp" />
 
+    <Button
+        android:id="@+id/motionActivityButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MOTION DETECTOR"
+        tools:layout_editor_absoluteX="115dp"
+        tools:layout_editor_absoluteY="379dp" />
+
 </android.support.constraint.ConstraintLayout>

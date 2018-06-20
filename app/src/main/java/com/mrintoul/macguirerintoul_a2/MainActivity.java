@@ -1,5 +1,6 @@
 package com.mrintoul.macguirerintoul_a2;
 
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -11,19 +12,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.widget.TextView;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
-
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements SensorEventListener {
+public class MainActivity extends AppCompatActivity implements SensorEventListener, View.OnClickListener {
     private RecyclerView sensorRecyclerView;
     private RecyclerView.Adapter sensorAdapter;
     private RecyclerView.LayoutManager sensorLayoutManager;
     public static SensorManager sensorManager;
     public static List<Sensor> sensorList;
     private Vibrator vibrator;
+    private Button motionActivityButton;
     boolean hasVibrated;
 
     @Override
@@ -42,6 +43,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         sensorRecyclerView.setAdapter(sensorAdapter);
 
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+
+        motionActivityButton = findViewById(R.id.motionActivityButton);
+        motionActivityButton.setOnClickListener(this);
     }
 
     @Override
@@ -85,5 +89,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.motionActivityButton) {
+            Intent i = new Intent(v.getContext(), MotionActivity.class);
+            startActivity(i);
+        }
     }
 }
