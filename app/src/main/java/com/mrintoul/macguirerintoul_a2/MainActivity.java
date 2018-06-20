@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     protected void onPause() {
+        soundButton.setText("SOUND DETECTOR");
         sensorManager.unregisterListener(this); // stop reading values from sensors
         soundMeter.stop(); // stop listening via the microphone
         super.onPause();
@@ -88,8 +89,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         float[] values = event.values; // put the sensor's values into an array
         if (type == Sensor.TYPE_LIGHT && values[0] < 5) {
             // beep if the light sensor reads lower than 5 illuminance
-            ToneGenerator toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
-            toneGen1.startTone(ToneGenerator.TONE_CDMA_PIP,500);
+            ToneGenerator toneGenerator = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
+            toneGenerator.startTone(ToneGenerator.TONE_CDMA_PIP,500);
         } else if (type == Sensor.TYPE_ACCELEROMETER) {
             // calculate how much the device is tilted
             float x = values[0];
